@@ -1,26 +1,46 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 
-entity BCD7Seg is
-    Port (
-        x, y, z, w : in  std_logic;
-        a, b, c, d, e, f, g : out std_logic
-    );
-end entity BCD7Seg;
+entity TB_BCD7Seg is
+end entity TB_BCD7Seg;
 
-architecture Behavioral of BCD7Seg is
+architecture Behavioral of TB_BCD7Seg is
+
+    component BCD7Seg is
+        Port (
+            x, y, z, w : in  std_logic;
+            a, b, c, d, e, f, g : out std_logic
+        );
+    end component;
+
+    signal x_sig, y_sig, z_sig, w_sig : std_logic;
+    signal a_sig, b_sig, c_sig, d_sig, e_sig, f_sig, g_sig : std_logic;
+
 begin
-    with (x & y & z & w) select
-        (a, b, c, d, e, f, g) <= 
-            "1111110" when "0000",  -- 0
-            "0110000" when "0001",  -- 1
-            "1101101" when "0010",  -- 2
-            "1111001" when "0011",  -- 3
-            "0110011" when "0100",  -- 4
-            "1011011" when "0101",  -- 5
-            "1011111" when "0110",  -- 6
-            "1110000" when "0111",  -- 7
-            "1111111" when "1000",  -- 8
-            "1111011" when "1001",  -- 9
-            "0000000" when others;  -- Invalid input
+
+    uut: BCD7Seg 
+        port map (
+            x => x_sig, y => y_sig, z => z_sig, w => w_sig,
+            a => a_sig, b => b_sig, c => c_sig, d => d_sig, e => e_sig, f => f_sig, g => g_sig
+        );
+
+    process
+    begin
+        -- Test case for 0
+        x_sig <= '0'; y_sig <= '0'; z_sig <= '0'; w_sig <= '0'; 
+        wait for 10 ns; 
+
+        -- Test case for 1
+        x_sig <= '0'; y_sig <= '0'; z_sig <= '0'; w_sig <= '1'; 
+        wait for 10 ns; 
+
+        -- ... Add test cases for other numbers (2-9) ...
+
+        -- Test case for invalid input
+        x_sig <= '1'; y_sig <= '1'; z_sig <= '1'; w_sig <= '1'; 
+        wait for 10 ns; 
+
+        wait; 
+    end process;
+
 end architecture Behavioral;
