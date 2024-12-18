@@ -1,41 +1,26 @@
 library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.std_logic_1164.all;
 
-entity BCD_to_7seg is
-    port(
-        x, y, z, w: in STD_LOGIC;
-        a, b, c, d, e, f, g: out STD_LOGIC
+entity BCD7Seg is
+    Port (
+        x, y, z, w : in  std_logic;
+        a, b, c, d, e, f, g : out std_logic
     );
-end entity BCD_to_7seg;
+end entity BCD7Seg;
 
-architecture Behavioral of BCD_to_7seg is
+architecture Behavioral of BCD7Seg is
 begin
-    process(x, y, z, w)
-    begin
-        case (x & y & z & w) is
-            when "0000" => -- 0
-                a <= '1'; b <= '1'; c <= '1'; d <= '1'; e <= '1'; f <= '1'; g <= '0';
-            when "0001" => -- 1
-                a <= '0'; b <= '1'; c <= '1'; d <= '0'; e <= '0'; f <= '0'; g <= '0';
-            when "0010" => -- 2
-                a <= '1'; b <= '1'; c <= '0'; d <= '1'; e <= '1'; f <= '0'; g <= '1';
-            when "0011" => -- 3
-                a <= '1'; b <= '1'; c <= '1'; d <= '1'; e <= '0'; f <= '0'; g <= '1';
-            when "0100" => -- 4
-                a <= '0'; b <= '1'; c <= '1'; d <= '0'; e <= '0'; f <= '1'; g <= '1';
-            when "0101" => -- 5
-                a <= '1'; b <= '0'; c <= '1'; d <= '1'; e <= '0'; f <= '1'; g <= '1';
-            when "0110" => -- 6
-                a <= '1'; b <= '0'; c <= '1'; d <= '1'; e <= '1'; f <= '1'; g <= '1';
-            when "0111" => -- 7
-                a <= '1'; b <= '1'; c <= '1'; d <= '0'; e <= '0'; f <= '0'; g <= '0';
-            when "1000" => -- 8
-                a <= '1'; b <= '1'; c <= '1'; d <= '1'; e <= '1'; f <= '1'; g <= '1';
-            when "1001" => -- 9
-                a <= '1'; b <= '1'; c <= '1'; d <= '1'; e <= '0'; f <= '1'; g <= '1';
-            when others =>
-                -- در صورتی که ورودی نامعتبر باشد، همه خروجی‌ها را صفر کنید.
-                a <= '0'; b <= '0'; c <= '0'; d <= '0'; e <= '0'; f <= '0'; g <= '0';
-        end case;
-    end process;
+    with (x & y & z & w) select
+        (a, b, c, d, e, f, g) <= 
+            "1111110" when "0000",  -- 0
+            "0110000" when "0001",  -- 1
+            "1101101" when "0010",  -- 2
+            "1111001" when "0011",  -- 3
+            "0110011" when "0100",  -- 4
+            "1011011" when "0101",  -- 5
+            "1011111" when "0110",  -- 6
+            "1110000" when "0111",  -- 7
+            "1111111" when "1000",  -- 8
+            "1111011" when "1001",  -- 9
+            "0000000" when others;  -- Invalid input
 end architecture Behavioral;
