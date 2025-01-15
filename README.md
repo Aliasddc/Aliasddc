@@ -1,32 +1,50 @@
 library ieee;
 use IEEE.std_logic_1164.all;
 
-entity BCD7Seg is
-    port (
-        x, y, z, w: in std_logic;
-        a, b, c, d, e, f, g: out std_logic
-    );
-end BCD7Seg;
+entity TB_BCD7Seg is
+end TB_BCD7Seg;
 
-architecture TrTbl of BCD7Seg is
-    signal INP: std_logic_vector(3 downto 0);
-    signal OUTP: std_logic_vector(6 downto 0);
+architecture behavior of TB_BCD7Seg is
+
+    signal x, y, z, w: std_logic := '0';
+    signal a, b, c, d, e, f, g: std_logic;
+
+    component BCD7Seg
+        port (
+            x, y, z, w: in std_logic;
+            a, b, c, d, e, f, g: out std_logic
+        );
+    end component;
+
 begin
 
-    INP <= (x, y, z, w);
-    (a, b, c, d, e, f, g) <= OUTP;
+    uut: BCD7Seg port map (
+        x => x,
+        y => y,
+        z => z,
+        w => w,
+        a => a,
+        b => b,
+        c => c,
+        d => d,
+        e => e,
+        f => f,
+        g => g
+    );
 
-    with INP select
-        OUTP <= "1111110" when "0000", -- 0
-                 "0110000" when "0001", -- 1
-                 "1101101" when "0010", -- 2
-                 "1111001" when "0011", -- 3
-                 "0110011" when "0100", -- 4
-                 "1011011" when "0101", -- 5
-                 "1011111" when "0110", -- 6
-                 "1110000" when "0111", -- 7
-                 "1111111" when "1000", -- 8
-                 "1111011" when "1001", -- 9
-                 "0000000" when others;   -- Default case
+    process
+    begin
+        -- Test all BCD inputs from 0 to 9
+        for i in 0 to 9 loop
+            x <= std_logic(to_unsigned(i, 4))(3);
+            y <= std_logic(to_unsigned(i, 4))(2);
+            z <= std_logic(to_unsigned(i, 4))(1);
+            w <= std_logic(to_unsigned(i, 4))(0);
+            wait for 10 ns;  -- Wait for 10 ns for the output to stabilize
+        end loop;
 
-end TrTbl;
+        -- End simulation
+        wait;
+    end process;
+
+end behavior;
