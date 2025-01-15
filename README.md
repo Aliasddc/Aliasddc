@@ -34,14 +34,45 @@ begin
 
     process
     begin
-        -- Test all BCD inputs from 0 to 9
-        for i in 0 to 9 loop
-            x <= std_logic(to_unsigned(i, 4))(3);
-            y <= std_logic(to_unsigned(i, 4))(2);
-            z <= std_logic(to_unsigned(i, 4))(1);
-            w <= std_logic(to_unsigned(i, 4))(0);
-            wait for 10 ns;  -- Wait for 10 ns for the output to stabilize
-        end loop;
+        -- Test input 0
+        x <= '0'; y <= '0'; z <= '0'; w <= '0';
+        wait for 10 ns;
+
+        -- Test input 1
+        x <= '0'; y <= '0'; z <= '0'; w <= '1';
+        wait for 10 ns;
+
+        -- Test input 2
+        x <= '0'; y <= '0'; z <= '1'; w <= '0';
+        wait for 10 ns;
+
+        -- Test input 3
+        x <= '0'; y <= '0'; z <= '1'; w <= '1';
+        wait for 10 ns;
+
+        -- Test input 4
+        x <= '0'; y <= '1'; z <= '0'; w <= '0';
+        wait for 10 ns;
+
+        -- Test input 5
+        x <= '0'; y <= '1'; z <= '0'; w <= '1';
+        wait for 10 ns;
+
+        -- Test input 6
+        x <= '0'; y <= '1'; z <= '1'; w <= '0';
+        wait for 10 ns;
+
+        -- Test input 7
+        x <= '0'; y <= '1'; z <= '1'; w <= '1';
+        wait for 10 ns;
+
+        -- Test input 8
+        x <= '1'; y <= '0'; z <= '0'; w <= '0';
+        wait for 10 ns;
+
+        -- Test input 9
+        x <= '1'; y <= '0'; z <= '0'; w <= '1';
+        wait for 10 ns;
 
         -- End simulation
         wait;
