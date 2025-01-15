@@ -1,56 +1,30 @@
-library IEEE;
+library ieee;
 use IEEE.std_logic_1164.all;
 
-entity tb_MUX41 is
-end tb_MUX41;
-
-architecture behavior of tb_MUX41 is
-    signal S: std_logic_vector(1 downto 0);
-    signal A, B, C, D: std_logic;
-    signal Y: std_logic;
-
-    component MUX41 is
-        port (
-            S: in std_logic_vector(1 downto 0);
-            A, B, C, D: in std_logic;
-            Y: out std_logic
-        );
-    end component;
-
-begin
-    uut: MUX41 port map (
-        S => S,
-        A => A,
-        B => B,
-        C => C,
-        D => D,
-        Y => Y
+entity BCD7Seg is
+    port (
+        x, y, z, w: in std_logic;
+        a, b, c, d, e, f, g: out std_logic
     );
+end BCD7Seg;
 
-    -- Stimulus process
-    stim_proc: process
-    begin
-        -- Test case 1
-        A <= '0'; B <= '0'; C <= '0'; D <= '0'; S <= "00"; wait for 10 ns;
-        assert (Y = '0') report "Test case 1 failed" severity error;
+architecture TrTbl of BCD7Seg is
+    signal INP: std_logic_vector(3 downto 0);
+    signal OUTP: std_logic_vector(6 downto 0);
+begin
+    INP <= (x, y, z, w);
+    (a, b, c, d, e, f, g) <= OUTP;
 
-        -- Test case 2
-        A <= '0'; B <= '1'; C <= '0'; D <= '0'; S <= "01"; wait for 10 ns;
-        assert (Y = '1') report "Test case 2 failed" severity error;
-
-        -- Test case 3
-        A <= '0'; B <= '0'; C <= '1'; D <= '0'; S <= "10"; wait for 10 ns;
-        assert (Y = '1') report "Test case 3 failed" severity error;
-
-        -- Test case 4
-        A <= '0'; B <= '0'; C <= '0'; D <= '1'; S <= "11"; wait for 10 ns;
-        assert (Y = '1') report "Test case 4 failed" severity error;
-
-        -- Test case 5 (Invalid case)
-        A <= '0'; B <= '0'; C <= '0'; D <= '0'; S <= "XX"; wait for 10 ns;
-        assert (Y = 'Z') report "Test case 5 failed" severity error;
-
-        wait;
-    end process stim_proc;
-
-end behavior;
+    with INP select
+        OUTP <= "1111110" when "0000", -- 0
+                 "0110000" when "0001", -- 1
+                 "1101101" when "0010", -- 2
+                 "1111001" when "0011", -- 3
+                 "0110011" when "0100", -- 4
+                 "1011011" when "0101", -- 5
+                 "1011111" when "0110", -- 6
+                 "1110000" when "0111", -- 7
+                 "1111111" when "1000", -- 8
+                 "1111011" when "1001", -- 9
+                 "0000000" when others; -- default case
+end TrTbl;
