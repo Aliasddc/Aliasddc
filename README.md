@@ -1,65 +1,32 @@
 library ieee;
 use IEEE.std_logic_1164.all;
 
-entity BCD7Seg_tb is
-end BCD7Seg_tb;
+entity BCD7Seg is
+    port (
+        x, y, z, w: in std_logic;
+        a, b, c, d, e, f, g: out std_logic
+    );
+end BCD7Seg;
 
-architecture test of BCD7Seg_tb is
-    signal x, y, z, w: std_logic;
-    signal a, b, c, d, e, f, g: std_logic;
-
-    component BCD7Seg
-        port (
-            x, y, z, w: in std_logic;
-            a, b, c, d, e, f, g: out std_logic
-        );
-    end component;
-
+architecture TrTbl of BCD7Seg is
+    signal INP: std_logic_vector(3 downto 0);
+    signal OUTP: std_logic_vector(6 downto 0);
 begin
-    UUT: BCD7Seg port map (x, y, z, w, a, b, c, d, e, f, g);
 
-    process
-    begin
-        -- تست برای ورودی 0
-        x <= '0'; y <= '0'; z <= '0'; w <= '0';
-        wait for 10 ns; 
+    INP <= (x, y, z, w);
+    (a, b, c, d, e, f, g) <= OUTP;
 
-        -- تست برای ورودی 1
-        x <= '0'; y <= '0'; z <= '0'; w <= '1';
-        wait for 10 ns; 
+    with INP select
+        OUTP <= "1111110" when "0000", -- 0
+                 "0110000" when "0001", -- 1
+                 "1101101" when "0010", -- 2
+                 "1111001" when "0011", -- 3
+                 "0110011" when "0100", -- 4
+                 "1011011" when "0101", -- 5
+                 "1011111" when "0110", -- 6
+                 "1110000" when "0111", -- 7
+                 "1111111" when "1000", -- 8
+                 "1111011" when "1001", -- 9
+                 "0000000" when others;   -- Default case
 
-        -- تست برای ورودی 2
-        x <= '0'; y <= '0'; z <= '1'; w <= '0';
-        wait for 10 ns; 
-
-        -- تست برای ورودی 3
-        x <= '0'; y <= '0'; z <= '1'; w <= '1';
-        wait for 10 ns; 
-
-        -- تست برای ورودی 4
-        x <= '0'; y <= '1'; z <= '0'; w <= '0';
-        wait for 10 ns; 
-
-        -- تست برای ورودی 5
-        x <= '0'; y <= '1'; z <= '0'; w <= '1';
-        wait for 10 ns; 
-
-        -- تست برای ورودی 6
-        x <= '0'; y <= '1'; z <= '1'; w <= '0';
-        wait for 10 ns; 
-
-        -- تست برای ورودی 7
-        x <= '0'; y <= '1'; z <= '1'; w <= '1';
-        wait for 10 ns; 
-
-        -- تست برای ورودی 8
-        x <= '1'; y <= '0'; z <= '0'; w <= '0';
-        wait for 10 ns; 
-
-        -- تست برای ورودی 9
-        x <= '1'; y <= '0'; z <= '0'; w <= '1';
-        wait for 10 ns; 
-
-        wait; -- پایان شبیه‌سازی
-    end process;
-end test;
+end TrTbl;
