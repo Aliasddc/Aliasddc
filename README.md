@@ -1,15 +1,15 @@
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_unsigned.all;
+use ieee.std_logic_signed.all;
 
-entity unsigned_multiplier is
+entity signed_multiplier is
     port (
         a, b: in std_logic_vector(7 downto 0);
         product: out std_logic_vector(15 downto 0)
     );
-end unsigned_multiplier;
+end signed_multiplier;
 
-architecture behavior of unsigned_multiplier is
+architecture behavior of signed_multiplier is
 begin
-    product <= a * b;
+    product <= std_logic_vector(signed(a) * signed(b));
 end behavior;
